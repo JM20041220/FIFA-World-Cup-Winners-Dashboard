@@ -43,6 +43,8 @@ winner_counts.columns = ['Country', 'Wins']
 # The Dash App 
 app = Dash(__name__)
 
+server = app.server
+
 fig = px.choropleth(
     winner_counts,
     locations='Country',
