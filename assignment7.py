@@ -42,6 +42,7 @@ winner_counts.columns = ['Country', 'Wins']
 
 # The Dash App 
 app = Dash(__name__)
+server = app.server
 
 app.layout = html.Div([
     html.H1("FIFA World Cup Winners", style={'textAlign': 'center'}),
