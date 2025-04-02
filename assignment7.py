@@ -1,4 +1,4 @@
-# Deployed Link: https://fifa-world-cup-winners-dashboard.onrender.com
+# Deployed Link: https://your-render-link-here.com (replace with your actual deployed app link)
 
 
 import pandas as pd
@@ -42,21 +42,27 @@ winner_counts.columns = ['Country', 'Wins']
 
 # The Dash App 
 app = Dash(__name__)
-server = app.server
+
+fig = px.choropleth(
+    winner_counts,
+    locations='Country',
+    locationmode='country names',
+    color='Wins',
+    color_continuous_scale='Viridis',
+    title='Countries with FIFA World Cup Wins'
+    )
+
+fig.update_traces(
+    hovertemplate = "Country: %{location}<br>Wins: %{z}<extra></extra>"
+    )
+
 
 app.layout = html.Div([
     html.H1("FIFA World Cup Winners", style={'textAlign': 'center'}),
 
     html.H2("Map of World Cup Winners"),
 
-    dcc.Graph(id='choropleth-map',
-              figure=px.choropleth(winner_counts,
-                                 locations='Country',
-                                 locationmode='country names',
-                                 color='Wins',
-                                 color_continuous_scale='Viridis',
-                                 title='Countries with FIFA World Cup Wins')
-              ),
+    dcc.Graph(id='choropleth-map', figure=fig),
 
     html.H2("Check Wins by Country"),
 
@@ -89,8 +95,11 @@ app.layout = html.Div([
 
 
 def update_country_wins(selected_country):
+    
     wins = winner_counts[winner_counts['Country'] == selected_country]['Wins'].values
+    
     count = int(wins[0]) if len(wins) > 0 else 0
+    
     return html.Div([
         html.Strong(selected_country),
         " FIFA World Cup wins", 
@@ -127,7 +136,7 @@ def update_year_result(selected_year):
 
 
             html.P([
-                
+
                 html.Strong(runnerup),
                 " was the runner-up."
 
